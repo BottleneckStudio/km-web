@@ -1,0 +1,22 @@
+{
+  "medias": [
+    {
+      "id": 1,
+      "username": "rbo13",
+      "content": "https://i.redd.it/4e4jm4d219s41.jpg",
+      "createdAt": 1586686331
+    },
+    {
+      "id": 2,
+      "username": "rbo12",
+      "content": "https://i.redd.it/xlkr5w1q44s41.jpg",
+      "createdAt": 1586686331
+    },
+    {
+      "id": 3,
+      "username": "rbo14",
+      "content": "https://i.redd.it/hlpy5hnrads41.jpg",
+      "createdAt": 1586686331
+    }
+  ]
+}

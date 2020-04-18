@@ -1,0 +1,50 @@
+name: Deploy Static Site
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Node
+      uses: actions/setup-node@v1
+      id: node
+
+    # - name: Create AWS Config File
+    #   env:
+    #     SUPER_SECRET: ${{ secrets.SuperSecret }}
+    #     TEST_KEY: ${{ secrets.TestKey }}
+    #     AWS_PROJECT_REGION: 'us-east-1'
+    #     AWS_COGNITO_IDP: ${{ secrets.AWS_COGNITO_IDP }}
+    #     AWS_COGNITO_REGION: 'us-east-1'
+    #     AWS_USER_POOL_ID: ${{ secrets.AWS_USER_POOL_ID }}
+    #     AWS_USER_POOL_CLIENT_ID: ${{ secrets.AWS_USER_POOL_CLIENT_ID }}
+    #   run: |
+    #     echo "$SUPER_SECRET > $TEST_KEY"
+    #     cat $(pwd)/src/aws-exports.example.js \
+    #     | sed "s/\$$AWS_COGNITO_IDENTITY_POOL_ID/${AWS_COGNITO_IDP}/g" \
+    #     | sed "s/\$$AWS_COGNITO_USER_POOL_ID/${AWS_USER_POOL_ID}/g" \
+    #     | sed "s/\$$AWS_COGNITO_POOL_WEB_CLIENT_ID/${AWS_USER_POOL_CLIENT_ID}/g" > $(pwd)/src/aws-exports.js
+
+    - name: Install Dependencies using Yarn
+      run: yarn install
+    - name: Build Application using Yarn
+      run: |
+        yarn build
+
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        SOURCE_DIR: 'dist'
