@@ -30,6 +30,12 @@
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline">
       </div>
 
+      <div
+        v-if="invalidForm"
+        class="mt-4 px-2 py-2 text-center">
+        <p class="font-normal text-red-500">{{ errorMsg }}</p>
+      </div>
+
       <button
         type="submit"
         class="bg-green-500 bg-transparent text-white font-bold text-lg hover:bg-green-700 p-2 mt-8">
@@ -52,8 +58,9 @@ export default {
         password: ''
       },
       passwordEmpty: false,
-      passwordStateClass: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
-      passwordInvalidClass: 'shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline',
+      errorMsg: '',
+      invalidForm: false,
+      formState: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline'
     }
   },
   methods: {
@@ -64,7 +71,9 @@ export default {
         AmplifyEventBus.$emit('authState', 'signedIn')
         this.$router.push('/profile')
       } catch (e) {
-        console.log(e)
+        this.invalidForm = true
+        this.errorMsg = e.message
+        console.log("Error Goes Here: ", e.message)
       }
     }
   }
