@@ -7,7 +7,8 @@ import Amplify, * as AmplifyModules from 'aws-amplify'
 import { AmplifyPlugin } from 'aws-amplify-vue'
 
 import router from './router'
-import config from './aws-exports'
+// import config from './aws-exports'
+import config from './aws-exports.json'
 
 // import tailwindcss as our UI toolkit.
 import './assets/styles/tailwind.css'

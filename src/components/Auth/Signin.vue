@@ -42,6 +42,7 @@
 <script>
 import { Auth } from 'aws-amplify'
 import { AmplifyEventBus } from 'aws-amplify-vue'
+
 export default {
   name: 'home',
   data() {
@@ -58,9 +59,13 @@ export default {
   methods: {
     async login() {
       const { username, password } = this.form
-      await Auth.signIn(username, password)
-      AmplifyEventBus.$emit('authState', 'signedIn')
-      this.$router.push('/profile')
+      try {
+        await Auth.signIn(username, password)
+        AmplifyEventBus.$emit('authState', 'signedIn')
+        this.$router.push('/profile')
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
