@@ -24,9 +24,14 @@ export default {
   },
   methods: {
     async signout () {
-      await Auth.signOut()
-      AmplifyEventBus.$emit('authState', 'signedOut')
-      this.$router.push('/')
+      try {
+        await Auth.signOut()
+        window.localStorage.removeItem('token')
+        AmplifyEventBus.$emit('authState', 'signedOut')
+        this.$router.push('/')
+      } catch(e) {
+        console.error(e)
+      }
     }
   },
   created() {

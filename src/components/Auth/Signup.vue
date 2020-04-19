@@ -57,6 +57,12 @@
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline">
       </div>
 
+      <div
+        v-if="invalidForm"
+        class="mt-4 px-2 py-2 text-center">
+        <p class="font-normal text-red-500">{{ errorMsg }}</p>
+      </div>
+
       <button
         type="submit"
         class="bg-green-500 text-white font-bold text-lg hover:bg-green-700 p-2 mt-8">
@@ -96,6 +102,8 @@ export default {
     return {
       formState: 'signUp',
       authCode: '',
+      errorMsg: '',
+      invalidForm: false,
       form: {
         username: '',
         password: '',
@@ -106,11 +114,30 @@ export default {
   },
   methods: {
     async signup() {
-      const { username, password, email } = this.form
-      await Auth.signUp({
-        username, password, attributes: { email }
-      })
-      this.formState = 'confirmSignUp'
+      try {
+        const { username, password, email } = this.form
+        await Auth.signUp({
+          username, password, attributes: { email }
+        })
+        this.formState = 'confirmSignUp'
+      } catch(e) {
+        this.invalidForm = true
+        if (e.code == "UsernameExistsException") {
+          this.errorMsg = e.message
+        }
+        if (e.message.includes('length') || e.message.includes('long')) {
+          this.errorMsg = 'Password Length must be greater than 8'
+        }
+        if (e.message.includes('symbol')) {
+          this.errorMsg = 'Password must have symbol characters'
+        }
+        if (e.message.includes('lowercase')) {
+          this.errorMsg = 'Password must have lowercase characters'
+        }
+        if (e.message.includes('uppercase')) {
+          this.errorMsg = 'Password must have uppercase characters'
+        }
+      }
     },
     async confirmSignUp() {
       const username = this.form.username

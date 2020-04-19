@@ -35,8 +35,8 @@ router.beforeResolve((to, from, next) => {
     let user
     Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then(data => {
       if (data && data.signInUserSession) {
-        user = data;
-        console.log(user)
+        user = data
+        window.localStorage.setItem('token', user.signInUserSession.accessToken.jwtToken)
       }
       return next()
     }).catch((e) => {
