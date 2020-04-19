@@ -60,20 +60,18 @@ export default {
       passwordEmpty: false,
       errorMsg: '',
       invalidForm: false,
-      formState: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline'
     }
   },
   methods: {
     async login() {
-      const { username, password } = this.form
       try {
+        const { username, password } = this.form
         await Auth.signIn(username, password)
         AmplifyEventBus.$emit('authState', 'signedIn')
         this.$router.push('/profile')
       } catch (e) {
         this.invalidForm = true
         this.errorMsg = e.message
-        console.log("Error Goes Here: ", e.message)
       }
     }
   }
