@@ -14,6 +14,7 @@
 
 <script>
 import { Auth } from 'aws-amplify'
+import { AmplifyEventBus } from 'aws-amplify-vue'
 
 export default {
   data() {
@@ -24,6 +25,7 @@ export default {
   methods: {
     async signout () {
       await Auth.signOut()
+      AmplifyEventBus.$emit('authState', 'signedOut')
       this.$router.push('/')
     }
   },

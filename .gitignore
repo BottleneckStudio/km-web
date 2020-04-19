@@ -108,3 +108,4 @@ dist
 
 # AWS Cognito Credentials
 src/aws-exports.js
+src/aws-exports.json
